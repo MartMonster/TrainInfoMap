@@ -1,18 +1,15 @@
-var map = L.map('map').setView([51.505, -0.09], 13);
+import ApiKeys from "./keys.js";
 
-import { mapbox, stuff } from './APIKeys.json';
-console.log(mapbox);
-console.log(stuff);
+document.addEventListener("DOMContentLoaded", () => {
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: ''
-}).addTo(map);
+    var map = L.map('map').setView([52.1009, 5.6463], 8);
 
-L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    .openPopup();
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+    }).addTo(map);
+
+    L.marker([52.1009, 5.6463]).addTo(map)
+        .bindPopup('Een popup in het<br>midden van Nederland!')
+        .openPopup();
+});

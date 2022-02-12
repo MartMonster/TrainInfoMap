@@ -1,14 +1,21 @@
 * {
 	font-family: Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
 }
 
 html {
 	color: #CCC;
 	background-color: #222;
+	min-height: 100% !important;
+	height: 100%;
 }
 
 body {
-	padding-bottom: 100px;
+	min-height: 100% !important;
+	height: 100%;
 }
 
-#map { height: 500px; }
+#map {
+	height: 100%;
+}
