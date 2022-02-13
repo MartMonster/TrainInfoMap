@@ -11,10 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var location = L.control.locate({
         flyTo: true,
-        setView: 'always',
         clickBehavior: {
-            inView: 'setView',
-            outOfView: 'setView'
+            inView: 'setView'
+        },
+        locateOptions: {
+            enableHighAccuracy: true
         }
     }).addTo(map);
 
