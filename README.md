@@ -2,8 +2,7 @@
 add a `keys.js` file in the main directory, and add the following code:
 ```js
 export default class ApiKeys {
-
-    static getMapBoxKey() {
+    static getNSKey() {
         return "{API Key}";
     }
 }
