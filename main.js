@@ -9,9 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
         maxZoom: 19,
     }).addTo(map);
 
+    var location = L.control.locate({
+        flyTo: true,
+        setView: 'always',
+        clickBehavior: {
+            inView: 'setView',
+            outOfView: 'setView'
+        }
+    }).addTo(map);
+
+    location.start();
+
     L.marker([52.1009, 5.6463]).addTo(map)
         .bindPopup('Een popup in het<br>midden van Nederland!')
         .openPopup();
 
     //Calls.getVehicles(53.2113, 6.5658, 1000);
+    
 });
