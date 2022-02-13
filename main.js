@@ -1,4 +1,4 @@
-import Calls from "./NSAPI/calls.js";
+import Trains from "./NSAPI/trains.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -24,6 +24,5 @@ document.addEventListener("DOMContentLoaded", () => {
         .bindPopup('Een popup in het<br>midden van Nederland!')
         .openPopup();
 
-    //Calls.getVehicles(53.2113, 6.5658, 1000);
-    
+    Trains.getVehicles(53.2113, 6.5658, 1000);
 });
