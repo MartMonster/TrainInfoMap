@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         maxZoom: 19,
+        minZoom: 6,
     }).addTo(map);
 
     var location = L.control.locate({
