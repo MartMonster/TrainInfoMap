@@ -61,6 +61,10 @@ export default async function apiCall(url = "virtual-train-api/api/vehicle?", me
     // Construct URL
     url = `http://${server}/${url}`;
 
+    // $.getJSON("keys.json", function(data) {
+    //     console.log(data.keys[0].key);
+    // });
+
     let nsKey = ApiKeys.getNSKey();
 
     let httpHeaders = {
