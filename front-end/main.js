@@ -26,12 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // location.start();
 
-    L.marker([52.1009, 5.6463]).addTo(map)
-        .bindPopup('Een popup in het<br>midden van Nederland!')
-        .openPopup();
+    // L.marker([52.1009, 5.6463]).addTo(map)
+    //     .bindPopup('Een popup in het<br>midden van Nederland!')
+    //     .openPopup();
 
     try {
-        Trains.getVehicles(53.2113, 6.5658, 1000);
+        let stuff 
+        Trains.getVehicles(53.2113, 6.5658, 1000).then(function(result) {
+            stuff = result.payload.treinen;
+            console.log(stuff);
+            stuff.forEach(function(trein) {
+                L.marker([trein.lat, trein.lng]).addTo(map);
+            })
+        });
     } catch(e) {
         alert("query didn't come back OK:\n"+e);
     }

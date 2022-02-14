@@ -48,7 +48,7 @@ export class Calls {
  * @param {string} url 
  * @param {string} method
  * @param {object} data
- * @returns {Promise<Response>}
+ * @returns {Promise<object>}
  */
 export default async function apiCall(url = "virtual-train-api/api/vehicle?", method = "GET", data = null, accept = "application/json") {
     // We obtain the server preference from the state storage (implemented using
