@@ -6,7 +6,7 @@ services:
         build:
             context: ./front-end
         ports:
-            - ${FRONTEND_PORT?:}:80
+            - 80:80
 
 #     proxy:
 #         build:
@@ -14,9 +14,20 @@ services:
 #         networks:
 #             - front-end
 #         ports:
-#             - ${FRONTEND_PORT?:}:80
+#             - 80:80
 #             - 443:443
 # networks:
 #     front-end:
 #         external:
 #             name: front-end_default
+
+    reverse:
+        container_name: reverse
+        hostname: reverse
+        image: nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx-1.21.6/conf/nginx.conf:/etc/nginx/nginx.conf
+            - ./proxy/ssl:/etc/ssl/private

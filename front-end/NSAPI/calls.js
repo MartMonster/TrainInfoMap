@@ -54,7 +54,7 @@ export default async function apiCall(url = "virtual-train-api/api/vehicle?", me
     // We obtain the server preference from the state storage (implemented using
     // localstorage APIs in this case)
     //const server = serverPreference.getSelectedServer();
-    const server = "localhost:8000";
+    const server = "localhost";
     if (server == null)
         throw new Error("No server preference set!");
 

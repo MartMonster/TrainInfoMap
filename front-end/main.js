@@ -14,24 +14,24 @@ document.addEventListener("DOMContentLoaded", () => {
         minZoom: 6,
     }).addTo(map);
 
-    var location = L.control.locate({
-        flyTo: true,
-        clickBehavior: {
-            inView: 'setView'
-        },
-        locateOptions: {
-            enableHighAccuracy: true
-        }
-    }).addTo(map);
+    // var location = L.control.locate({
+    //     flyTo: true,
+    //     clickBehavior: {
+    //         inView: 'setView'
+    //     },
+    //     locateOptions: {
+    //         enableHighAccuracy: true
+    //     }
+    // }).addTo(map);
 
-    location.start();
+    // location.start();
 
     L.marker([52.1009, 5.6463]).addTo(map)
         .bindPopup('Een popup in het<br>midden van Nederland!')
         .openPopup();
 
     try {
-        //Trains.getVehicles(53.2113, 6.5658, 1000);
+        Trains.getVehicles(53.2113, 6.5658, 1000);
     } catch(e) {
         alert("query didn't come back OK:\n"+e);
     }

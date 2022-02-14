@@ -9,7 +9,7 @@ export default class ApiKeys {
 ```
 Where `{API Key}` needs to be replaced with an actual API Key.
 
-Then run the docker-compose file (port can be edited by editing the .env file)
+Then run the docker-compose file
 
 # How to run (Windows)
 add a `keys.js` file in the main directory, and add the following code:
