@@ -26,5 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .bindPopup('Een popup in het<br>midden van Nederland!')
         .openPopup();
 
-    Trains.getVehicles(53.2113, 6.5658, 1000);
+    try {
+        Trains.getVehicles(53.2113, 6.5658, 1000);
+    } catch(e) {
+        alert("query didn't come back OK:\n"+e);
+    }
 });
