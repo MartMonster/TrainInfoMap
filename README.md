@@ -1,5 +1,5 @@
 # How to run (Docker)
-add a `keys.js` file in the main directory, and add the following code:
+add a `keys.js` file in the `front-end` directory, and add the following code:
 ```js
 export default class ApiKeys {
     static getNSKey() {
@@ -12,7 +12,7 @@ Where `{API Key}` needs to be replaced with an actual API Key.
 Then run the docker-compose file
 
 # How to run (Windows)
-add a `keys.js` file in the main directory, and add the following code:
+add a `keys.js` file in the `front-end` directory, and add the following code:
 ```js
 export default class ApiKeys {
     static getNSKey() {
