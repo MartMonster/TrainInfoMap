@@ -1,3 +1,5 @@
 keys.js
-front-end/nginx-1.21.6/logs/
+# front-end/nginx-1.21.6/logs/
+access.log
+error.log
 front-end/keys.json
