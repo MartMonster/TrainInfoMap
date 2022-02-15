@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
         Trains.getVehicles(53.2113, 6.5658, 1000).then(function(result) {
+            console.log(result);
             result.payload.treinen.forEach(function(trein) {
                 L.marker([trein.lat, trein.lng]).addTo(map);
             })
