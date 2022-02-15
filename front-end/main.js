@@ -2,6 +2,7 @@ import Trains from "./NSAPI/trains.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    //map initialization
     var map = L.map('map').setView([52.1009, 5.6463], 8);
 
     $.getJSON("spoorkaart/spoorkaart.json", function(data) {
@@ -14,21 +15,27 @@ document.addEventListener("DOMContentLoaded", () => {
         minZoom: 6,
     }).addTo(map);
 
-    // var location = L.control.locate({
-    //     flyTo: true,
-    //     clickBehavior: {
-    //         inView: 'setView'
-    //     },
-    //     locateOptions: {
-    //         enableHighAccuracy: true
-    //     }
-    // }).addTo(map);
+    if(!navigator.geolocation) {
+        console.log("Your browser doesn't support geolocation")
+    } else {
+        setInterval(() => {
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }, 5000);
+    }
 
-    // location.start();
+    function getPosition(position){
+        //console.log(position)
+        var lat = position.coords.latitude
+        var long = position.coords.longitude
+        //var accuracy = position.coords.accuracy
 
-    // L.marker([52.1009, 5.6463]).addTo(map)
-    //     .bindPopup('Een popup in het<br>midden van Nederland!')
-    //     .openPopup();
+        console.log("Your location is: ", lat, ", "+ long)
+    }
+
+    /*L.marker([52.1009, 5.6463]).addTo(map)
+        .bindPopup('Een popup in het<br>midden van Nederland!')
+        .openPopup();
+    */
 
     try {
         Trains.getVehicles(53.2113, 6.5658, 1000).then(function(result) {
