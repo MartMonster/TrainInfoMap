@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
             iconUrl: "img/train-station.png",
             shadowUrl: "img/train-station-shadow.png",
 
-            iconSize: [30,30],
-            shadowSize: [30,30],
-            iconAnchor: [15,30],
-            shadowAnchor: [15,30],
+            iconSize: [25,25],
+            shadowSize: [25,25],
+            iconAnchor: [12,25],
+            shadowAnchor: [12,25],
             popupAnchor: [0,0]
         });
         data.payload.forEach(function(station) {
@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     let trainIcon = L.icon({
-        iconUrl: "img/train.png",
-        shadowUrl: "img/train.png",
+        iconUrl: "img/train-ns.png",
+        shadowUrl: "img/train-shadow.png",
 
         iconSize: [30,30],
         shadowSize: [30,30],
