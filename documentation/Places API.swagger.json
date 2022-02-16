@@ -1,0 +1,956 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Places API",
+    "version": "1.0",
+    "description": "De Places API is verantwoordelijk voor het verschaffen van gegevens over places en locatie data hiervan. Een place is een abstractie van een locatiegebonden stuk informatie, zoalsadressen, poi's, haltes, stationswinkels, ov-fietsen, greenwheels autos, parkeerplaatsen, steden etc."
+  },
+  "host": "gateway.apiportal.ns.nl",
+  "basePath": "/places-api",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "apiKeyHeader": {
+      "type": "apiKey",
+      "name": "Ocp-Apim-Subscription-Key",
+      "in": "header"
+    },
+    "apiKeyQuery": {
+      "type": "apiKey",
+      "name": "subscription-key",
+      "in": "query"
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    },
+    {
+      "apiKeyQuery": []
+    }
+  ],
+  "paths": {
+    "/v2/ovfiets": {
+      "get": {
+        "description": "Retrieve a list of OV-fiets locations and availability. Use the query parameters to limit the number of places",
+        "operationId": "beschikbaarheid",
+        "summary": "OV-fiets availability",
+        "tags": [
+          "OV-fiets"
+        ],
+        "parameters": [
+          {
+            "name": "station_code",
+            "in": "query",
+            "description": "Returns results which are linked to a Station based on the station code",
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2OvfietsGetdefaultApplicationJsonResponse"
+            }
+          },
+          "400": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2OvfietsGetdefaultApplicationJsonResponse"
+            }
+          },
+          "500": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2OvfietsGetdefaultApplicationJsonResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v2/autosuggest/{type}/{id}": {
+      "get": {
+        "description": "Request a specific autosuggest resource. This endpoint is deprecated. Please use /api/v2/places",
+        "operationId": "autoSuggestForType",
+        "summary": "autoSuggestForType",
+        "tags": [
+          "Autosuggest"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "The type of place.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the place.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Information about a specific place",
+            "schema": {
+              "$ref": "#/definitions/Place"
+            }
+          },
+          "400": {
+            "description": "Information about a specific place",
+            "schema": {
+              "$ref": "#/definitions/Place"
+            }
+          },
+          "500": {
+            "description": "Information about a specific place",
+            "schema": {
+              "$ref": "#/definitions/Place"
+            }
+          }
+        }
+      }
+    },
+    "/v2/autosuggest": {
+      "get": {
+        "description": "Performs an auto suggest based on the given types and q. The default types on which is searched are address and stops. This endpoint is deprecated. Please use /api/v2/places",
+        "operationId": "autoSuggest",
+        "summary": "autoSuggest",
+        "tags": [
+          "Autosuggest"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "q, does a full text search",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Multi valued array(comma separated list)",
+            "type": "array"
+          },
+          {
+            "name": "type[]",
+            "in": "query",
+            "description": "Multi valued array for iOS, equivalent rot type",
+            "type": "array"
+          },
+          {
+            "name": "session_token",
+            "in": "query",
+            "description": "A session token, used to group the query and selection phases of a user autocomplete search into a discrete session for billing purposes",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2AutosuggestGetdefaultApplicationJsonResponse"
+            }
+          },
+          "400": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2AutosuggestGetdefaultApplicationJsonResponse"
+            }
+          },
+          "500": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2AutosuggestGetdefaultApplicationJsonResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v2/places/{type}/resource/{resource}": {
+      "get": {
+        "description": "Returns an image of a place based on type and resource name",
+        "operationId": "image",
+        "summary": "Images",
+        "tags": [
+          "Places"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "The type of Place",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resource",
+            "in": "path",
+            "description": "Resource name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "blur",
+            "in": "query",
+            "description": "Format - float. Blur the image",
+            "type": "number",
+            "default": 0.0
+          }
+        ],
+        "produces": [
+          "image/*"
+        ],
+        "responses": {
+          "404": {
+            "description": "No image found of type for id",
+            "schema": {
+              "$ref": "#/definitions/DeferredResultObject"
+            }
+          }
+        }
+      }
+    },
+    "/v2/places": {
+      "get": {
+        "description": "Use the query parameters to limit the number of places",
+        "operationId": "places",
+        "summary": "List places",
+        "tags": [
+          "Places"
+        ],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "latitude, to be used with parameter lng",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "description": "longitude, to be used with parameter lat",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Multi valued array",
+            "type": "array"
+          },
+          {
+            "name": "type[]",
+            "in": "query",
+            "description": "Multi valued array for iOS, equivalent to type",
+            "type": "array"
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "Multi valued array, specify the order in which results are returned",
+            "type": "array"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Format - int32. Limit the number of results returned",
+            "type": "integer",
+            "default": 150
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "Format - int32. Radius in meters, to be used in conjunction with lat and lng",
+            "type": "integer",
+            "default": 1000
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "The language the response should be in",
+            "type": "string",
+            "default": "nl"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "q, does a full text search",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "screen-density",
+            "in": "query",
+            "description": "preferred screen density. Images are optimized for a screen resolution. Usually 1.0 is non-retina, 2.0 is double=retina",
+            "type": "string",
+            "default": "ios-2.0"
+          },
+          {
+            "name": "details",
+            "in": "query",
+            "description": "Whether or not to include details in the result",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "station_code",
+            "in": "query",
+            "description": "Returns results which are linked to a Station based on the station code",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Search by name does not use a fuzzy or full text search",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "description": "Search for a pre-defined types. E.g. ovfiets returns results with type=stationfacility, but only OV-fiets identifiers",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "platforms",
+            "in": "query",
+            "description": "A comma seperated list. Limit the search to a specific platform. (e.g. some results include links to android apps which should not be shown on iOS)",
+            "type": "array"
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "description": "Multi valued array with identifiers. Can be excluded by prefixing with minus (e.g. -ovfiets)",
+            "type": "array",
+            "default": ""
+          },
+          {
+            "name": "moment",
+            "in": "query",
+            "description": "Set a date and time which determines if Places and locations are Open or Closed at that moment. Format is in ISO8601 format, when omitted date and time is set to Today, NOW",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "countries",
+            "in": "query",
+            "description": "Comma separated list of country codes to filter stations.",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "X-session-token",
+            "in": "header",
+            "description": "A session token, used to group the query and selection phases of a user autocomplete search into a discrete session for billing purposes",
+            "type": "string",
+            "default": ""
+          }
+        ],
+        "produces": [
+          "application/json; charset=UTF-8",
+          "application/json"
+        ],
+        "responses": {
+          "400": {
+            "description": "limit should be bigger then 0 or moment could not be parsed, parameter is in ISO8601 format",
+            "schema": {
+              "$ref": "#/definitions/DeferredResultObject"
+            },
+            "examples": {
+              "application/json; charset=UTF-8": "{\r\n  \"resultHandler\": {},\r\n  \"result\": {},\r\n  \"errorResult\": true,\r\n  \"setOrExpired\": true,\r\n  \"resultInternal\": true\r\n}"
+            }
+          },
+          "200": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2PlacesGetdefaultApplicationJsonResponse"
+            }
+          },
+          "500": {
+            "description": "List of available places",
+            "schema": {
+              "$ref": "#/definitions/V2PlacesGetdefaultApplicationJsonResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v2/places/{type}/{id}": {
+      "get": {
+        "description": "Return a place based on id and type",
+        "operationId": "placesForType",
+        "summary": "Places for type",
+        "tags": [
+          "Places"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "The type of Place",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the place object",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "The language the response should be in",
+            "type": "string",
+            "default": "nl"
+          }
+        ],
+        "produces": [
+          "application/json; charset=UTF-8",
+          "application/json"
+        ],
+        "responses": {
+          "404": {
+            "description": "No place found of type for id",
+            "schema": {
+              "$ref": "#/definitions/DeferredResultObject"
+            },
+            "examples": {
+              "application/json; charset=UTF-8": "{\r\n  \"resultHandler\": {},\r\n  \"result\": {},\r\n  \"errorResult\": true,\r\n  \"setOrExpired\": true,\r\n  \"resultInternal\": true\r\n}"
+            }
+          },
+          "200": {
+            "description": "List of available places based on id and type",
+            "schema": {
+              "$ref": "#/definitions/V2Places-type-id-GetdefaultApplicationJsonResponse"
+            }
+          },
+          "500": {
+            "description": "List of available places based on id and type",
+            "schema": {
+              "$ref": "#/definitions/V2Places-type-id-GetdefaultApplicationJsonResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DeferredResultHandlerObject": {
+      "type": "object"
+    },
+    "DeferredResultObject": {
+      "type": "object",
+      "properties": {
+        "resultHandler": {
+          "$ref": "#/definitions/DeferredResultHandlerObject"
+        },
+        "result": {
+          "type": "object"
+        },
+        "errorResult": {
+          "type": "boolean"
+        },
+        "setOrExpired": {
+          "type": "boolean"
+        },
+        "resultInternal": {
+          "type": "boolean"
+        }
+      }
+    },
+    "App": {
+      "description": "Available apps for this location",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "listLogoImage": {
+          "$ref": "#/definitions/Link"
+        },
+        "listLogoImages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResolutionAndFile"
+          }
+        },
+        "links": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AppLink"
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppLink": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "ppackage": {
+          "type": "string"
+        },
+        "fallback": {
+          "type": "string"
+        }
+      }
+    },
+    "ExtraInfo": {
+      "description": "Optional, extra information for this specific location",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "GeoLocation": {
+      "description": "used internally by the places API, please use top level lat, lng",
+      "type": "object",
+      "properties": {
+        "lat": {
+          "format": "double",
+          "type": "number"
+        },
+        "lon": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "Link": {
+      "description": "Image which can be used as header image. This is usually a larger full color/resolution image.",
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string"
+        }
+      }
+    },
+    "Location": {
+      "description": "Represents a single location with usually a lat, lng. A place can have multiple locations.",
+      "type": "object",
+      "properties": {
+        "placeId": {
+          "description": "Unique identifier of the location",
+          "type": "string",
+          "example": "ChIJ2QUls2lrxkcRI4_mKWufkOM"
+        },
+        "name": {
+          "description": "Sumo, Mauritsweg, Rotterdam",
+          "type": "string"
+        },
+        "stationCode": {
+          "description": "To which station this location belongs, optional",
+          "type": "string",
+          "example": "UT"
+        },
+        "lat": {
+          "format": "double",
+          "description": "Latitude",
+          "type": "number",
+          "example": 52.224914100000007
+        },
+        "lng": {
+          "format": "double",
+          "description": "longitude",
+          "type": "number",
+          "example": 5.177699800000001
+        },
+        "radius": {
+          "format": "double",
+          "type": "number"
+        },
+        "destinationPage": {
+          "description": "Contains a destination page",
+          "type": "boolean"
+        },
+        "location": {
+          "$ref": "#/definitions/GeoLocation"
+        },
+        "open": {
+          "description": "Is this location open?",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown",
+            "open,close,unknown"
+          ],
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/Link"
+        },
+        "thumbnail": {
+          "$ref": "#/definitions/Link"
+        },
+        "infoUrl": {
+          "description": "Link to an external page with info about this location",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "openingHours": {
+          "description": "Opening hours for the week",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpeningHour"
+          }
+        },
+        "extra": {
+          "description": "Extra untyped information, e.g. amount of OV-fiets available",
+          "type": "object",
+          "additionalProperties": {
+            "description": "Extra untyped information, e.g. amount of OV-fiets available",
+            "type": "string"
+          }
+        },
+        "infoImages": {
+          "description": "Information images",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RichImage"
+          }
+        },
+        "apps": {
+          "description": "Available apps for this location",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/App"
+          }
+        },
+        "sites": {
+          "description": "Available sites for this location",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Site"
+          }
+        },
+        "extraInfo": {
+          "description": "Optional, extra information for this specific location",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExtraInfo"
+          }
+        },
+        "incompleteRemarks": {
+          "type": "string"
+        },
+        "elasticSearchGeolocationToNull": {
+          "$ref": "#/definitions/Location"
+        }
+      }
+    },
+    "OpeningHour": {
+      "description": "Represents the OpeningHour of a single day",
+      "type": "object",
+      "properties": {
+        "dayOfWeek": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "startTime": {
+          "description": "The time when this location will open",
+          "type": "string",
+          "example": "13:00"
+        },
+        "endTime": {
+          "description": "The time when it is closed, note! when the end time is bigger then the start time, it closes the next day during the night",
+          "type": "string",
+          "example": "01:00"
+        },
+        "closesNextDay": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Place": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Type",
+          "enum": [
+            "poi,station-taxi,stationfacility,greenwheels,qpark,address,city,stop"
+          ],
+          "type": "string",
+          "example": "poi"
+        },
+        "name": {
+          "description": "Name",
+          "type": "string",
+          "example": "Sumo"
+        },
+        "identifiers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ovfiets",
+              "fietsenstalling",
+              "zonetaxi",
+              "park_ride_paid",
+              "park_ride_free",
+              "greenwheels",
+              "stationinfoMissing",
+              "stationinfoBlacklist"
+            ],
+            "type": "string"
+          }
+        },
+        "description": {
+          "description": "Description of the place",
+          "type": "string",
+          "example": "Sumo, Mauritsweg, Rotterdam"
+        },
+        "categories": {
+          "description": "List of categories to which a place belongs",
+          "type": "array",
+          "items": {
+            "description": "List of categories to which a place belongs",
+            "type": "string",
+            "example": "shop,facility"
+          },
+          "example": "shop,facility"
+        },
+        "locations": {
+          "description": "List locations for this place",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Location"
+          }
+        },
+        "listLogoImage": {
+          "$ref": "#/definitions/Link"
+        },
+        "primaryColor": {
+          "description": "The primary color for this place, value is in hex #ffffff",
+          "type": "string",
+          "example": "#f1f2f3"
+        },
+        "secondaryColor": {
+          "description": "The secondary color for this place, value is in hex #ffffff",
+          "type": "string",
+          "example": "#f1f2f3"
+        },
+        "backgroundColor": {
+          "description": "The background color for this place, value is in hex #ffffff",
+          "type": "string",
+          "example": "#f1f2f3"
+        },
+        "open": {
+          "description": "Is one of the locations open?, This is an aggregate of all Locations",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown",
+            "yes,no,unknown"
+          ],
+          "type": "string",
+          "example": "yes"
+        },
+        "openingHours": {
+          "description": "Opening hours for the week",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpeningHour"
+          }
+        },
+        "keywords": {
+          "description": "List of keywords",
+          "type": "array",
+          "items": {
+            "description": "List of keywords",
+            "type": "string",
+            "example": "Koffie,Winkel"
+          },
+          "example": "Koffie,Winkel"
+        },
+        "stationBound": {
+          "description": "is this place part of a station",
+          "type": "boolean"
+        },
+        "headerImage": {
+          "$ref": "#/definitions/Link"
+        },
+        "advertImages": {
+          "description": "Links to advert images",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RichImage"
+          }
+        },
+        "infoImages": {
+          "description": "Links to info images",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RichImage"
+          }
+        },
+        "incompleteRemarks": {
+          "type": "string"
+        }
+      }
+    },
+    "Resolution": {
+      "type": "object",
+      "properties": {
+        "identifiers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ResolutionAndFile": {
+      "type": "object",
+      "properties": {
+        "referenceCounter": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "resolution": {
+          "$ref": "#/definitions/Resolution"
+        },
+        "file": {
+          "format": "binary",
+          "type": "string"
+        },
+        "originalFilename": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RichImage": {
+      "description": "Links to info images",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the image",
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/Link"
+        },
+        "qualifier": {
+          "description": "The type of image",
+          "enum": [
+            "landscape,portrait,square"
+          ],
+          "type": "string",
+          "example": "landscape"
+        },
+        "title": {
+          "description": "The title",
+          "enum": [
+            "landscape,portrait,square"
+          ],
+          "type": "string",
+          "example": "landscape"
+        },
+        "subtitle": {
+          "description": "The subtitle which usually is below the title",
+          "type": "string"
+        },
+        "body": {
+          "description": "Body text",
+          "type": "string"
+        },
+        "buttonText": {
+          "description": "Text to be placed on a call to action button",
+          "type": "string"
+        },
+        "buttonLink": {
+          "description": "Link that should be opened when a user presses the call to action button",
+          "type": "string"
+        },
+        "language": {
+          "description": "Which language this image is in",
+          "type": "string"
+        }
+      }
+    },
+    "Site": {
+      "description": "Available sites for this location",
+      "type": "object",
+      "properties": {
+        "qualifier": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "V2PlacesGetdefaultApplicationJsonResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Place"
+      }
+    },
+    "V2Places-type-id-GetdefaultApplicationJsonResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Place"
+      }
+    },
+    "V2AutosuggestGetdefaultApplicationJsonResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Place"
+      }
+    },
+    "V2OvfietsGetdefaultApplicationJsonResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Place"
+      }
+    }
+  },
+  "tags": []
+}

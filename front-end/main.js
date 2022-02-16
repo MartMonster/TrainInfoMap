@@ -12,19 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
     $.getJSON("stations/stations.json", function(data) {
         console.log(data);
         let stationIcon = L.icon({
-            iconUrl: "img/train-station",
-            shadowUrl: "img/train-station-shadow",
+            iconUrl: "img/train-station.png",
+            shadowUrl: "img/train-station-shadow.png",
 
-            iconSize: [512,512],
-            shadowSize: [512,512],
-            iconAnchor: [256,0],
-            shadowAnchor: [256,0],
+            iconSize: [30,30],
+            shadowSize: [30,30],
+            iconAnchor: [15,30],
+            shadowAnchor: [15,30],
             popupAnchor: [0,0]
         });
         L.marker([52.1009, 5.6463], {icon: stationIcon}).addTo(map);
-        // data.forEach(function(station) {
-        //     L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
-        // })
+        data.payload.forEach(function(station) {
+            if (station.stationType === "KNOOPPUNT_INTERCITY_STATION") {
+                L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
+            }
+        })
     })
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
