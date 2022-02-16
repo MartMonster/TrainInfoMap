@@ -28,6 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
+    let trainIcon = L.icon({
+        iconUrl: "img/train.png",
+        shadowUrl: "img/train.png",
+
+        iconSize: [30,30],
+        shadowSize: [30,30],
+        iconAnchor: [15,30],
+        shadowAnchor: [15,30],
+        popupAnchor: [0,0]
+    });
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         maxZoom: 19,
@@ -60,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Trains.getVehicles(53.2113, 6.5658, 1000).then(function(result) {
             console.log(result);
             result.payload.treinen.forEach(function(trein) {
-                L.marker([trein.lat, trein.lng]).addTo(map);
+                L.marker([trein.lat, trein.lng], {icon: trainIcon}).addTo(map);
             })
         });
     } catch(e) {
