@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
             shadowAnchor: [15,30],
             popupAnchor: [0,0]
         });
-        L.marker([52.1009, 5.6463], {icon: stationIcon}).addTo(map);
         data.payload.forEach(function(station) {
             if (station.stationType === "KNOOPPUNT_INTERCITY_STATION") {
                 L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
