@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupAnchor: [0,0]
         });
         data.payload.forEach(function(station) {
-            if (station.stationType === "KNOOPPUNT_INTERCITY_STATION") {
+            if (station.stationType === "KNOOPPUNT_INTERCITY_STATION" || station.stationType === "MEGA_STATION") {
                 L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
             }
         })
