@@ -16,4 +16,11 @@ export default class Trains {
         if(!apiResponse.ok) throw new Error(await apiResponse.text());
         return await apiResponse.json();
     }
+
+    static async getStopsForTrain(id) {
+        const apiResponse = await apiCall(`reisinformatie-api/api/v2/journey?train=${id}`, "GET");
+
+        if (!apiResponse.ok) throw new Error(await apiResponse.text());
+        return await apiResponse.json();
+    }
 }

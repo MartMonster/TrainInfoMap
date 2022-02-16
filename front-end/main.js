@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         data.payload.forEach(function(station) {
             if (station.stationType === "KNOOPPUNT_INTERCITY_STATION" || station.stationType === "MEGA_STATION") {
-                L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
+                //L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
             }
         })
     })
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         shadowSize: [30,30],
         iconAnchor: [15,30],
         shadowAnchor: [15,30],
-        popupAnchor: [0,0]
+        popupAnchor: [0,-25]
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,8 +65,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 5000);
     }
 
+    let trainStops = new Array();
     function onClick() {
+        console.log(this.options.title);
+        Trains.getStopsForTrain(this.options.title).then(function(result) {
+            console.log(result);
+            result.payload.stops.forEach(function(stop) {
+                if(stop.status === "ORIGIN" || stop.status === "STOP" || stop.status === "DESTINATION") {
+                    trainStops.push(L.marker([stop.stop.lat, stop.stop.lng]).addTo(map));
+                }
+            })
+        });
         //alle markers langs het traject moeten verschijnen
+    }
+
+    function onClose() {
+        trainStops.forEach((stop) => {
+            map.removeLayer(stop);
+        })
+        trainStops = new Array();
     }
 
     function getPosition(position){
@@ -87,7 +104,10 @@ document.addEventListener("DOMContentLoaded", () => {
         Trains.getVehicles(53.2113, 6.5658, 1000).then(function(result) {
             console.log(result);
             result.payload.treinen.forEach(function(trein) {
-                L.marker([trein.lat, trein.lng], {icon: trainIcon}).addTo(map).on('click', onClick);
+                L.marker([trein.lat, trein.lng], {title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon})
+                    .addTo(map).on('click', onClick)
+                    .bindPopup(`Trein ID: ${trein.ritId}`)
+                    .getPopup().on('remove', onClose);
             })
         });
     } catch(e) {
