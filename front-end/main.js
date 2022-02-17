@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             iconSize: [25,25],
             shadowSize: [25,25],
-            iconAnchor: [12,25],
-            shadowAnchor: [12,25],
+            iconAnchor: [12.5,25],
+            shadowAnchor: [12.5,25],
             popupAnchor: [0,0]
         });
 
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         iconSize: [15,15],
         shadowSize: [15,15],
-        iconAnchor: [8,15],
-        shadowAnchor: [8,15],
+        iconAnchor: [7.5,7.5],
+        shadowAnchor: [7.5,7.5],
         popupAnchor: [0,0]
     })
 
