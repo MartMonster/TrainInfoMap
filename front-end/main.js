@@ -3,7 +3,7 @@ import Trains from "./NSAPI/trains.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     //map initialization
-    var map = L.map('map').setView([52.1009, 5.6463], 8);
+    var map = L.map('map', {attributionControl: false}).setView([52.1009, 5.6463], 8);
 
     $.getJSON("spoorkaart/spoorkaart.json", function(data) {
         L.geoJSON(data.payload.features).addTo(map);
@@ -22,20 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
             popupAnchor: [0,0]
         });
 
-        let minorStationIcon = L.icon({
-            iconUrl: "img/minor-train-station.png",
-            shadowUrl: "img/minor-train-station.png",
-
-            iconSize: [15,15],
-            shadowSize: [15,15],
-            iconAnchor: [8,15],
-            shadowAnchor: [8,15],
-            popupAnchor: [0,0]
-        })
-
         data.payload.forEach(function(station) {
-            if (station.stationType === "KNOOPPUNT_INTERCITY_STATION" || station.stationType === "MEGA_STATION") {
-                //L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
+            if ((station.stationType === "KNOOPPUNT_INTERCITY_STATION" || station.stationType === "MEGA_STATION") && station.land === "NL") {
+                L.marker([station.lat, station.lng], {icon: stationIcon}).addTo(map);
             }
         })
     })
@@ -50,6 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
         shadowAnchor: [15,30],
         popupAnchor: [0,-25]
     });
+
+    let minorStationIcon = L.icon({
+        iconUrl: "img/minor-train-station.png",
+        shadowUrl: "img/minor-train-station.png",
+
+        iconSize: [15,15],
+        shadowSize: [15,15],
+        iconAnchor: [8,15],
+        shadowAnchor: [8,15],
+        popupAnchor: [0,0]
+    })
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -71,8 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
         Trains.getStopsForTrain(this.options.title).then(function(result) {
             console.log(result);
             result.payload.stops.forEach(function(stop) {
-                if(stop.status === "ORIGIN" || stop.status === "STOP" || stop.status === "DESTINATION") {
-                    trainStops.push(L.marker([stop.stop.lat, stop.stop.lng]).addTo(map));
+                console.log("type:" + stop.locationType);
+                if((stop.status === "ORIGIN" || stop.status === "STOP" || stop.status === "DESTINATION")) {
+                    trainStops.push(L.marker([stop.stop.lat, stop.stop.lng], {icon: minorStationIcon}).addTo(map));
                 }
             })
         });
