@@ -85,27 +85,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     setInterval(updateTrains, 60000);
-
+    let isPopupOpen = false;
     // TODO: actually update the location of the trains instead of replacing the object
     async function updateTrains() {
+        if(isPopupOpen) {
+            return;
+        }
         console.log("querying for trains");
+        if (trains.length > 0) {
+            trains.forEach((train) => {
+                map.removeLayer(train);
+            });
+            trains = new Array();
+        }
         try {
-            if(trains.length > 0 ) {
-                map.closePopup();
-                trains.forEach((train) => {
-                    map.removeLayer(train);
-                });
-                trains = new Array();
-            }
             Trains.getVehicles(53.2113, 6.5658, 1000).then(function (result) {
+                console.log("queried trains:");
                 console.log(result);
                 result.payload.treinen.forEach(function (trein) {
                     trains.push(L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
                         .addTo(map).on('click', onClick)
                         .bindPopup(`Trein ID: ${trein.ritId}`)
                         .getPopup().on('remove', onClose)._source);
-                })
-                console.log(trains);
+                });
             });
         } catch (e) {
             alert("query didn't come back OK:\n" + e);
@@ -115,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let allStationsRaw;
     let majorStations = new Array();
     $.getJSON("stations/stations.json", function (data) {
+        console.log("stations:");
         console.log(data);
         allStationsRaw = data.payload;
         data.payload.forEach(function (station) {
@@ -173,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let trainStops = new Array();
     function onClick() {
+        isPopupOpen = true;
         majorStations.forEach((station) => {
             map.removeLayer(station);
         })
@@ -206,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.removeLayer(stop);
         });
         trainStops = new Array();
+        isPopupOpen = false;
     }
 
     function getPosition(position){
