@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         minZoom: 6,
     }).addTo(map);
 
-    let trains = new Array();
+    let trains = new Map();
     $.getJSON("spoorkaart/spoorkaart.json", function(data) {
         L.geoJSON(data.payload.features).addTo(map);
         updateTrains();
@@ -85,29 +85,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     setInterval(updateTrains, 60000);
+
     let isPopupOpen = false;
-    // TODO: actually update the location of the trains instead of replacing the object
+    
+    let updateCount = 0;
     async function updateTrains() {
-        if(isPopupOpen) {
-            return;
-        }
         console.log("querying for trains");
-        if (trains.length > 0) {
-            trains.forEach((train) => {
-                map.removeLayer(train);
-            });
-            trains = new Array();
-        }
         try {
             Trains.getVehicles(53.2113, 6.5658, 1000).then(function (result) {
                 console.log("queried trains:");
                 console.log(result);
-                result.payload.treinen.forEach(function (trein) {
-                    trains.push(L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
-                        .addTo(map).on('click', onClick)
-                        .bindPopup(`Trein ID: ${trein.ritId}`)
-                        .getPopup().on('remove', onClose)._source);
-                });
+                updateCount++;
+                if(trains.size > 0) {
+                    result.payload.treinen.forEach((trein) => {
+                        let foundTrein = false;
+                        trains.forEach((value, train) => {
+                            if(trein.ritId === train.options.title) {
+                                train._latlng.lat = trein.lat;
+                                train._latlng.lng = trein.lng;
+                                trains.set(train, updateCount);
+                                foundTrein = true;
+                            }
+                        });
+                        if(foundTrein === false) {
+                            console.log("couldn't find train");
+                            let marker = L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
+                                .on('click', onClick)
+                                .bindPopup(`Trein ID: ${trein.ritId}`)
+                                .getPopup().on('remove', onClose)._source;
+                            if(!isPopupOpen) {
+                                marker.addTo(map);
+                            }
+                            trains.set(marker, updateCount);
+                        }
+                        });
+                    trains.forEach((update, train) => {
+                        if (update > updateCount) {
+                            map.removeLayer(train);
+                            trains.delete(train);
+                        }
+                    });
+                } else {
+                    result.payload.treinen.forEach(function (trein) {
+                        let marker = L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
+                            .on('click', onClick)
+                            .bindPopup(`Trein ID: ${trein.ritId}`)
+                            .getPopup().on('remove', onClose)._source;
+                        if (!isPopupOpen) {
+                            marker.addTo(map);
+                        }
+                        trains.set(marker, updateCount);
+                    });
+                }
             });
         } catch (e) {
             alert("query didn't come back OK:\n" + e);
@@ -122,7 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
         allStationsRaw = data.payload;
         data.payload.forEach(function (station) {
             if ((station.stationType === "KNOOPPUNT_INTERCITY_STATION" || station.stationType === "MEGA_STATION") && station.land === "NL") {
-                //L.marker([station.lat, station.lng], { icon: knooppuntICStation }).addTo(map);
                 addStationToMap(station, null, majorStations);
             }
         });
@@ -180,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
         majorStations.forEach((station) => {
             map.removeLayer(station);
         })
-        trains.forEach((train) => {
+        trains.forEach((value, train) => {
             if (this.options.title !== train.options.title) {
                 map.removeLayer(train);
             }
@@ -201,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         majorStations.forEach((station) => {
             station.addTo(map);
         });
-        trains.forEach((train) => {
+        trains.forEach((value, train) => {
             if (this._source.options.title !== train.options.title) {
                 train.addTo(map);
             }
