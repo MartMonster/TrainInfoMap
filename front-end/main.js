@@ -83,11 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
         popupAnchor: [0, 0]
     });
 
+
+    setInterval(updateTrains, 60000);
+
     // TODO: actually update the location of the trains instead of replacing the object
     async function updateTrains() {
         console.log("querying for trains");
         try {
             if(trains.length > 0 ) {
+                map.closePopup();
                 trains.forEach((train) => {
                     map.removeLayer(train);
                 });
@@ -107,8 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("query didn't come back OK:\n" + e);
         }
     }
-
-    setInterval(updateTrains, 60000);
 
     let allStationsRaw;
     let majorStations = new Array();
