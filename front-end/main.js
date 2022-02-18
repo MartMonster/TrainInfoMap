@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupAnchor: [0, 0]
     });
 
+    // TODO: actually update the location of the trains instead of replacing the object
     async function updateTrains() {
         console.log("querying for trains");
         try {
