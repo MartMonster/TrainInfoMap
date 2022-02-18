@@ -11,8 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
         minZoom: 6,
     }).addTo(map);
 
+    let trains = new Array();
     $.getJSON("spoorkaart/spoorkaart.json", function(data) {
         L.geoJSON(data.payload.features).addTo(map);
+        updateTrains();
     });
 
     let trainIcon = L.icon({
@@ -81,20 +83,31 @@ document.addEventListener("DOMContentLoaded", () => {
         popupAnchor: [0, 0]
     });
 
-    
-    try {
-        Trains.getVehicles(53.2113, 6.5658, 1000).then(function (result) {
-            console.log(result);
-            result.payload.treinen.forEach(function (trein) {
-                L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
-                    .addTo(map).on('click', onClick)
-                    .bindPopup(`Trein ID: ${trein.ritId}`)
-                    .getPopup().on('remove', onClose);
-            })
-        });
-    } catch (e) {
-        alert("query didn't come back OK:\n" + e);
+    async function updateTrains() {
+        console.log("querying for trains");
+        try {
+            if(trains.length > 0 ) {
+                trains.forEach((train) => {
+                    map.removeLayer(train);
+                });
+                trains = new Array();
+            }
+            Trains.getVehicles(53.2113, 6.5658, 1000).then(function (result) {
+                console.log(result);
+                result.payload.treinen.forEach(function (trein) {
+                    trains.push(L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
+                        .addTo(map).on('click', onClick)
+                        .bindPopup(`Trein ID: ${trein.ritId}`)
+                        .getPopup().on('remove', onClose)._source);
+                })
+                console.log(trains);
+            });
+        } catch (e) {
+            alert("query didn't come back OK:\n" + e);
+        }
     }
+
+    setInterval(updateTrains, 60000);
 
     let allStationsRaw;
     let majorStations = new Array();
@@ -106,9 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 //L.marker([station.lat, station.lng], { icon: knooppuntICStation }).addTo(map);
                 addStationToMap(station, null, majorStations);
             }
-            
-        })
-    })
+        });
+    });
 
     async function addStationToMap(station = null, stop = null, array = null) {
         if (station !== null) {
@@ -161,6 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
         majorStations.forEach((station) => {
             map.removeLayer(station);
         })
+        trains.forEach((train) => {
+            if (this.options.title !== train.options.title) {
+                map.removeLayer(train);
+            }
+        })
         console.log(this.options.title);
         Trains.getStopsForTrain(this.options.title).then(function(result) {
             console.log(result);
@@ -176,6 +193,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function onClose() {
         majorStations.forEach((station) => {
             station.addTo(map);
+        });
+        trains.forEach((train) => {
+            if (this._source.options.title !== train.options.title) {
+                train.addTo(map);
+            }
         });
         trainStops.forEach((stop) => {
             map.removeLayer(stop);
