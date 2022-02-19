@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         shadowSize: [30, 30],
         iconAnchor: [15, 15],
         shadowAnchor: [10, 22.5],
-        popupAnchor: [0, -25]
+        popupAnchor: [0, -12.5]
     });
 
     let minorStation = L.icon({
@@ -84,9 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    setInterval(updateTrains, 60000);
+    setInterval(updateTrains, 10000);
 
-    let isPopupOpen = false;
+    let openPopup = null;
     
     let updateCount = 0;
     async function updateTrains() {
@@ -101,10 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         let foundTrein = false;
                         trains.forEach((value, train) => {
                             if(trein.ritId === train.options.title) {
-                                train._latlng.lat = trein.lat;
-                                train._latlng.lng = trein.lng;
+                                train.setLatLng([trein.lat, trein.lng]);
+                                // train._latlng.lat = trein.lat;
+                                // train._latlng.lng = trein.lng;
                                 trains.set(train, updateCount);
                                 foundTrein = true;
+                                if(openPopup !== null) {
+                                    map.panTo(openPopup._latlng);
+                                }
                             }
                         });
                         if(foundTrein === false) {
@@ -113,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 .on('click', onClick)
                                 .bindPopup(`Trein ID: ${trein.ritId}`)
                                 .getPopup().on('remove', onClose)._source;
-                            if(!isPopupOpen) {
+                            if(openPopup === null) {
                                 marker.addTo(map);
                             }
                             trains.set(marker, updateCount);
@@ -131,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             .on('click', onClick)
                             .bindPopup(`Trein ID: ${trein.ritId}`)
                             .getPopup().on('remove', onClose)._source;
-                        if (!isPopupOpen) {
+                        if (openPopup === null) {
                             marker.addTo(map);
                         }
                         trains.set(marker, updateCount);
@@ -204,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let trainStops = new Array();
     function onClick() {
-        isPopupOpen = true;
+        openPopup = this;
         majorStations.forEach((station) => {
             map.removeLayer(station);
         })
@@ -238,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.removeLayer(stop);
         });
         trainStops = new Array();
-        isPopupOpen = false;
+        openPopup = null;
     }
 
     function getPosition(position){
