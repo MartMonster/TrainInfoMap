@@ -3,7 +3,7 @@ import Trains from "./NSAPI/trains.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     //map initialization
-    var map = L.map('map', {attributionControl: false}).setView([52.1009, 5.6463], 8);
+    var map = L.map('map').setView([52.1009, 5.6463], 8);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         iconSize: [30, 30],
         shadowSize: [30, 30],
-        iconAnchor: [15, 30],
-        shadowAnchor: [15, 30],
+        iconAnchor: [15, 15],
+        shadowAnchor: [10, 22.5],
         popupAnchor: [0, -25]
     });
 
