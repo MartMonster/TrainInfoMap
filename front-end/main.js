@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 							}
 						});
 						if (foundTrein === false) {
-							console.log("couldn't find train");
+							console.log(`adding new train: ${trein.ritId}`);
 							let marker = L.marker([trein.lat, trein.lng], { title: `${trein.ritId}`/* , speed: trein.snelheid, direction: richting */, icon: trainIcon })
 								.on('click', onClick)
 								.bindPopup(`Trein ID: ${trein.ritId}`)
@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					});
 					trains.forEach((update, train) => {
 						if (update > updateCount) {
+							console.log(`removing train: ${train.id}`);
 							map.removeLayer(train);
 							trains.delete(train);
 						}
