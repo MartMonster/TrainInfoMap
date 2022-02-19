@@ -1,5 +1,3 @@
-import ApiKeys from '../keys.js';
-
 /**
  * Makes an API call to the given URL with the stored server preference
  * @param {string} url 
@@ -18,23 +16,11 @@ export default async function apiCall(url = "virtual-train-api/api/vehicle?", me
     // Construct URL
     url = `http://${server}/${url}`;
 
-    // $.getJSON("keys.json", function(data) {
-    //     console.log(data.keys[0].key);
-    // });
+    let nsKey;
 
-    let nsKey = ApiKeys.getNSKey();
-
-    let httpHeaders = {
-        "Ocp-Apim-Subscription-Key": nsKey,
-        "Content-Type": "application/json",
-        "Accept": accept,
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type"
-    }
-
-    /** @type {HeadersInit} */
-    const requestHeaders = new Headers(httpHeaders);
+    await $.getJSON("keys.json", function(data) {
+        nsKey = data.keys[0].key;
+    });
 
     // Set options
     /** @type {RequestInit} */
@@ -68,7 +54,7 @@ export default async function apiCall(url = "virtual-train-api/api/vehicle?", me
     // Await the result: any errors will the thrown
     return await fetch(url, {
         method: "GET",
-        headers: requestHeaders,
+        headers: requestConfig.headers,
         body: requestConfig.body
     });
 }
