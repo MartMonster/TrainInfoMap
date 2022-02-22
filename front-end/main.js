@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function updateTrains() {
 		console.log("querying for trains");
 		try {
-			Trains.getVehicles(53.2113, 6.5658, 1000).then(function (result) {
+			Trains.getVehicles().then(function (result) {
 				console.log("queried trains:");
 				console.log(result);
 				updateCount++;
@@ -248,9 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		//console.log(position)
 		var lat = position.coords.latitude
 		var long = position.coords.longitude
-		//var accuracy = position.coords.accuracy
+		var accuracy = position.coords.accuracy
 
-		console.log("Your location is: ", lat, ", " + long)
+		console.log("Your location is: ", lat, ", " + long + ", accuracy: " + accuracy.toFixed(2) + "m")
+		var radius = Math.max(accuracy, 1000)
+		Trains.getNearestVehicles(lat, long, radius.toFixed(0)).then((data) => {
+			console.log("neares vehicles:");
+			console.log(data.payload.treinen);
+		})
 	}
 
 	/*L.marker([52.1009, 5.6463]).addTo(map)
