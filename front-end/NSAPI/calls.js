@@ -6,15 +6,6 @@
  * @returns {Promise<object>}
  */
 export default async function apiCall(url = "virtual-train-api/api/vehicle?", method = "GET", data = null, accept = "application/json") {
-    // We obtain the server preference from the state storage (implemented using
-    // localstorage APIs in this case)
-    //const server = serverPreference.getSelectedServer();
-    const server = "localhost";
-    if (server == null)
-        throw new Error("No server preference set!");
-
-    // Construct URL
-    url = `http://${server}/${url}`;
 
     let nsKey;
 
@@ -53,7 +44,7 @@ export default async function apiCall(url = "virtual-train-api/api/vehicle?", me
 
     // Await the result: any errors will the thrown
     return await fetch(url, {
-        method: "GET",
+        method: method,
         headers: requestConfig.headers,
         body: requestConfig.body
     });
